@@ -1,5 +1,5 @@
 from pathlib import Path
-import custom_setting
+import LeaveMessage.custom_setting as custom_setting
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
