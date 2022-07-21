@@ -1,8 +1,12 @@
+import json
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from .models import User
 from .serializers import UserSerializer
+from django.core.validators          import validate_email
+from django.core.mail                import EmailMessage
+from django.http                     import HttpResponse, JsonResponse
 from rest_framework import generics
 from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
@@ -12,7 +16,7 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from django.contrib.auth import logout, login
-
+from user import random_code
 
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -73,3 +77,23 @@ class AccountAuthBackend(object):
             return User.objects.get(pk=id_) # <-- tried to get by email here
         except User.DoesNotExist:
             return None
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def email_check(request):
+    data = JSONParser().parse(request)
+    try:
+        validate_email(data["email"])
+        if User.objects.filter(email=data["email"]).exists():
+            return JsonResponse({"message" : "EXISTS_EMAIL"}, status=400)
+        code=random_code.make_code()
+        message_data = "인증코드: " + code
+
+        mail_title = "남김 이메일 인증코드 발송"
+        mail_to = data['email']
+        email = EmailMessage(mail_title,message_data,to=[mail_to])
+        email.send()
+
+        return JsonResponse({"code" : f"{code}"}, status= HTTP_200_OK)
+    except KeyError:
+        return Response({"message" : "INVALID_KEY"}, status=HTTP_400_BAD_REQUEST)
