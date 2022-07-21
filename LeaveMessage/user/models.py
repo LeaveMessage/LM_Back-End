@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+
 class UserManager(BaseUserManager):
     # 일반 user 생성
     def create_user(self, email,name, password):
@@ -18,10 +19,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     name = models.CharField(default='', max_length=10, null=False, blank=False)
-    email= models.EmailField(default='')
+    email= models.EmailField(default='', unique=True)
     is_auth=models.BooleanField(default=False)
     token = models.TextField(default='')
 
@@ -33,7 +35,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     # 사용자의 username field는 nickname으로 설정
-    USERNAME_FIELD = 'name'
+    USERNAME_FIELD = 'email'
     # 필수로 작성해야하는 field
     REQUIRED_FIELDS = []
 
