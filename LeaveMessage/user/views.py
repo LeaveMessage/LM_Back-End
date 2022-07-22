@@ -19,6 +19,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import logout, login
 from user import random_code
 
+
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -38,7 +39,7 @@ def user_login(request):
         user.token = token.key
         user.save()
         login(request, user)
-        return Response({'token': token.key}, status=HTTP_200_OK)
+        return Response({'token': token.key, 'name': user.name}, status=HTTP_200_OK)
 
 
 @api_view(['GET'])
