@@ -102,7 +102,8 @@ def email_check(request):
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
 def user_signout(request):
-    data= json.loads(request.header)
+    print(request)
+    data= json.loads(request.body)
     try:
         user=User.objects.filter(token=data['token'])
         user.delete()
