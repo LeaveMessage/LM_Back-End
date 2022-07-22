@@ -132,6 +132,8 @@ def send(request):
     if request.method == 'POST':
         user = User.objects.get(token=data['token'])
         post = Post.objects.get(user_id=user.id)
+        if not post:
+            return Response({'message': 'fail'}, status=HTTP_400_BAD_REQUEST)
         message_data = post.content
         recievers = Reciever.objects.filter(post_id=post.id)
         print(recievers)
