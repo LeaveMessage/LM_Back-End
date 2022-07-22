@@ -16,6 +16,19 @@ from dateutil.relativedelta import relativedelta
 # Create your views here.
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
+def check_post(request):
+    data=JSONParser().parse(request)
+    if request.method=='POST':
+        user = User.objects.get(token=data['token'])
+        post_check=Post.objects.filter(user_id=user.id)
+        if post_check:
+            return Response({'error':'이미 글이 존재합니다.'},status=HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
 def create_post(request):
     data=JSONParser().parse(request)
     if request.method=='POST':
