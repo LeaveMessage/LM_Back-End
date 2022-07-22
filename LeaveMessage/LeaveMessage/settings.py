@@ -13,7 +13,7 @@ SECRET_KEY = custom_setting.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.124.86.178','127.0.0.1']
+ALLOWED_HOSTS = []
 
 EMAIL_HOST = 'smtp.naver.com'
 # 메일을 호스트하는 서버
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'six',
+    'django_apscheduler'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,7 @@ AUTHENTICATION_BACKENDS = (
     )
 
 AUTH_USER_MODEL='user.User'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
+
+SCHEDULER_DEFAULT = True

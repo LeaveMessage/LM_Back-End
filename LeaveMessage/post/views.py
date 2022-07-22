@@ -11,7 +11,8 @@ from .models import Post
 from user.models import User
 from reciever.models import Reciever
 
-from datetime import datetime, timedelta
+from pytz import timezone
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 # Create your views here.
 @api_view(['POST'])
@@ -102,5 +103,11 @@ def update_post(request):
                     post_id=post    
                 )
             return Response({'message':'success'},status=HTTP_200_OK)
+
+
+def expiry_check():
+    today = datetime.now(timezone('Asia/Seoul'))
+    for post in Post.objects.all():
+        print(post.deadline_date - today)
 
 
