@@ -83,20 +83,24 @@ def update_post(request):
     if request.method=='POST':
         user = User.objects.get(token=data['token'])
         post_check=Post.objects.filter(user_id=user.id)
-        Post.objects.update(
-            content=data['content'],
-            cycle=data['cycle'],
-            count=data['count'],
-            user_id=user
-        )
-        post=Post.objects.get(user_id=user.id)
-        reciever = Reciever.objects.filter(post_id=post.id)
-        reciever.delete()
-        for e in data['reciever']:
-            Reciever.objects.create(
-                email=e,
-                post_id=post    
+        if not post_check:
+            return Response({'error':'글이 존재하지 않습니다.'},status=HTTP_400_BAD_REQUEST)
+        else:
+            post_check.delete()
+            Post.objects.create(
+                content=data['content'],
+                cycle=data['cycle'],
+                count=data['count'],
+                user_id=user
             )
-        return Response({'message':'success'},status=HTTP_200_OK)
+            post=Post.objects.get(user_id=user.id)
+            reciever = Reciever.objects.filter(post_id=post.id)
+            reciever.delete()
+            for e in data['reciever']:
+                Reciever.objects.create(
+                    email=e,
+                    post_id=post    
+                )
+            return Response({'message':'success'},status=HTTP_200_OK)
 
 

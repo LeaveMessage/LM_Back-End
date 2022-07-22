@@ -19,6 +19,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import logout, login
 from user import random_code
 
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
 
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -114,3 +117,34 @@ def user_signout(request):
 
     except KeyError:
         return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes((IsAuthenticated,))
+def check_lifecode(request):
+    print(request)
+    data= json.loads(request.body)
+    try:
+        user=User.objects.get(token=data['token'])
+        token_check=user.lifecode
+        if token_check:
+            return Response(status=HTTP_200_OK)
+        else:
+            return Response({"message":"토큰이 없습니다."})
+
+    except KeyError:
+        return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes((IsAuthenticated,))
+def get_lifecode(request):
+    print(request)
+    data= json.loads(request.body)
+    try:
+        user=User.objects.get(token=data['token'])
+        if user.lifecode==data['lifecode']:
+            +relativedelta(months=int(data['cycle']))
+            return Response({"message":"확인 되었습니다."},status=HTTP_200_OK)
+
+    except KeyError:
+        return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
+
