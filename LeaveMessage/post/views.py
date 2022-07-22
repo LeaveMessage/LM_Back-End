@@ -1,4 +1,5 @@
 from requests import post
+from django.core.mail                import EmailMessage
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
 from rest_framework.decorators import permission_classes, api_view
@@ -10,6 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Post
 from user.models import User
 from reciever.models import Reciever
+from user import random_code
 
 from pytz import timezone
 from datetime import datetime
@@ -108,6 +110,20 @@ def update_post(request):
 def expiry_check():
     today = datetime.now(timezone('Asia/Seoul'))
     for post in Post.objects.all():
-        print(post.deadline_date - today)
+        if post.deadline_date - today:
+            code = random_code.make_code()
+            message_data = "인증코드: " + code
+
+            mail_title = "남김 life_code 발송"
+
+            user = post.user_id
+            mail_to = user.email
+            email = EmailMessage(mail_title, message_data, to=[mail_to])
+            email.send()
+
+            user.lifecode = code
+            user.save()
+
+
 
 
