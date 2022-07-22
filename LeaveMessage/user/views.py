@@ -38,7 +38,7 @@ def user_login(request):
         user.token = token.key
         user.save()
         login(request, user)
-        return Response({'token': token.key}, status=HTTP_200_OK)
+        return Response({'token': token.key, 'name': user.name}, status=HTTP_200_OK)
 
 
 @api_view(['GET'])
