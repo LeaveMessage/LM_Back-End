@@ -13,7 +13,7 @@ SECRET_KEY = custom_setting.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.124.86.178']
+ALLOWED_HOSTS = ['13.124.86.178','127.0.0.1']
 
 EMAIL_HOST = 'smtp.naver.com'
 # 메일을 호스트하는 서버
