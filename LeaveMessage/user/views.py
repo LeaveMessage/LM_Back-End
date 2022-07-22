@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from paramiko import AutoAddPolicy
 from .models import User
+from post.models import Post
 from .serializers import UserSerializer
 from django.core.validators          import validate_email
 from django.core.mail                import EmailMessage
@@ -141,10 +142,12 @@ def get_lifecode(request):
     data= json.loads(request.body)
     try:
         user=User.objects.get(token=data['token'])
+        post=Post.objects.get(user_id=user.id)
         if user.lifecode==data['lifecode']:
-            +relativedelta(months=int(data['cycle']))
+            post.deadline_date=(datetime.today() + relativedelta(months=int(post.cycle)))
+            post.save()
+            print(post.deadline_date)
             return Response({"message":"확인 되었습니다."},status=HTTP_200_OK)
 
     except KeyError:
         return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
-
