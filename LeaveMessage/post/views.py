@@ -41,7 +41,7 @@ def create_post(request):
             content=data['content'],
             cycle=data['cycle'],
             count=data['count'],
-            deadline_date=datetime.today() + relativedelta(months=int(data['cycle'])),
+            deadline_date=(datetime.today() + relativedelta(months=int(data['cycle']))),
             user_id=user
         )
         print(f"deadline_date: {datetime.today() + relativedelta(months=int(data['cycle']))}")
