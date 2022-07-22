@@ -125,5 +125,31 @@ def expiry_check():
             user.save()
 
 
+@api_view(['POST'])
+@permission_classes((IsAuthenticated,))
+def send(request):
+    data = JSONParser().parse(request)
+    if request.method == 'POST':
+        user = User.objects.get(token=data['token'])
+        post = Post.objects.get(user_id=user.id)
+        if not post:
+            return Response({'message': 'fail'}, status=HTTP_400_BAD_REQUEST)
+        message_data = post.content
+        recievers = Reciever.objects.filter(post_id=post.id)
+        print(recievers)
+        
+        if recievers:
+            for reciever in recievers:
+                mail_title = f"{user.name}님이 남김."
+                mail_to = reciever.email
+                email = EmailMessage(mail_title, message_data, to=[mail_to])
+                email.send()
+            return Response({'message': 'success'}, status=HTTP_200_OK)
+        else: return Response({'error':'수신자가 존재하지 않습니다.'},status=HTTP_400_BAD_REQUEST)
+    return Response({'error': '뭔가 고장났음.'}, status=HTTP_400_BAD_REQUEST)
+        
+
+
+
 
 

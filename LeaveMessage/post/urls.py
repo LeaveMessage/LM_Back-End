@@ -9,4 +9,5 @@ urlpatterns = [
     path('get/', views.get_post),
     path('update/', views.update_post),
     path('new/', views.check_post),
+    path('send/', views.send)
 ]
