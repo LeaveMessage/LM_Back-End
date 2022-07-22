@@ -28,6 +28,7 @@ class User(AbstractBaseUser):
     token = models.TextField(default='')
 
     # User 모델의 필수 field
+    lifecode=models.TextField(default='')
     is_active = models.BooleanField(default=True)    
     is_admin = models.BooleanField(default=False)
     
