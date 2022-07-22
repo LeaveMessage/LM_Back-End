@@ -9,5 +9,5 @@ urlpatterns = [
     path('emailcheck/', views.email_check),
     path('signup/', views.UserCreate.as_view()),
     #path('lifecode/', 'pass'),
-    #path('signout/', 'pass'),
+    path('signout/', views.user_signout),
 ]

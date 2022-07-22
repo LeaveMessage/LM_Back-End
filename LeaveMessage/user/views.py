@@ -2,6 +2,7 @@ import json
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
+from paramiko import AutoAddPolicy
 from .models import User
 from .serializers import UserSerializer
 from django.core.validators          import validate_email
@@ -97,3 +98,17 @@ def email_check(request):
         return JsonResponse({"code" : f"{code}"}, status= HTTP_200_OK)
     except KeyError:
         return Response({"message" : "INVALID_KEY"}, status=HTTP_400_BAD_REQUEST)
+
+@api_view(["POST"])
+@permission_classes((IsAuthenticated,))
+def user_signout(request):
+    data= json.loads(request.header)
+    try:
+        user=User.objects.filter(token=data['token'])
+        user.delete()
+        request.user.auth_token.delete()
+        logout(request)
+        return Response({"message":"success"},status=HTTP_200_OK)
+
+    except KeyError:
+        return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
