@@ -11,7 +11,7 @@ from .models import Post
 from user.models import User
 from reciever.models import Reciever
 
-from datetime import datetime
+from datetime import datetime, timedelta
 # Create your views here.
 @api_view(['GET','POST','DELETE'])
 @permission_classes((AllowAny,))
@@ -23,10 +23,10 @@ def crud_post(request):
             content=data['content'],
             cycle=data['cycle'],
             count=data['count'],
-            deadline_date=datetime.today() + datetime.timedelta(days=int(data['cycle'])),
+            deadline_date=datetime.today() + timedelta(days=int(data['cycle'])),
             user_id=user
         )
-        print(f"deadline_date: {datetime.today() + datetime.timedelta(days=int(data['count']))}")
+        print(f"deadline_date: {datetime.today() + timedelta(days=int(data['count']))}")
         post=Post.objects.get(user_id=user.id)
         for e in data['reciever']:
             Reciever.objects.create(
