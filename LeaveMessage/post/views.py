@@ -10,6 +10,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Post
 from user.models import User
 from reciever.models import Reciever
+
+from datetime import datetime
 # Create your views here.
 @api_view(['GET','POST','DELETE'])
 @permission_classes((AllowAny,))
@@ -21,8 +23,10 @@ def crud_post(request):
             content=data['content'],
             cycle=data['cycle'],
             count=data['count'],
+            deadline_date=datetime.today() + datetime.timedelta(days=int(data['cycle'])),
             user_id=user
         )
+        print(f"deadline_date: {datetime.today() + datetime.timedelta(days=int(data['count']))}")
         post=Post.objects.get(user_id=user.id)
         for e in data['reciever']:
             Reciever.objects.create(
@@ -35,5 +39,5 @@ def crud_post(request):
         return Response({'message':'success'},status=HTTP_200_OK)
     elif request.method=='GET':
         print(2)
-        return Response(status=HTTP_200_OK) 
+        return Response(status=HTTP_200_OK)
 
