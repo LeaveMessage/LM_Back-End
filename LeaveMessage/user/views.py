@@ -147,4 +147,3 @@ def get_lifecode(request):
 
     except KeyError:
         return Response({"message":"Error"},status=HTTP_400_BAD_REQUEST)
-
