@@ -13,7 +13,7 @@ SECRET_KEY = custom_setting.secret_key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 EMAIL_HOST = 'smtp.naver.com'
 # 메일을 호스트하는 서버
@@ -142,8 +142,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',  # <-- And here
     ],
 }
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000'
-                         ,'http://localhost:3000']
+CORS_ORIGIN_WH0ITELIST = ['http://127.0.0.1:3000'
+                         ,'http://localhost:3000', 'https://www.setupeggs-taxi.com/']
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
     )
