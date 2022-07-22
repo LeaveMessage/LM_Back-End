@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
     ],
 }
 CORS_ORIGIN_WH0ITELIST = ['http://127.0.0.1:3000'
-                         ,'http://localhost:3000', 'https://www.setupeggs-taxi.com/']
+                         ,'http://localhost:3000']
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
     )
@@ -153,3 +153,4 @@ AUTH_USER_MODEL='user.User'
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"  # Default
 
 SCHEDULER_DEFAULT = True
+CORS_ORIGIN_ALLOW_ALL = True
